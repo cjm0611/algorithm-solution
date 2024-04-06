@@ -3,6 +3,7 @@ package Baekjoon;
 import java.util.*;
 import java.io.*;
 
+// DFS와 BFS
 public class Problem1260 {
     static boolean[] visited;
     static int[][] graph;
