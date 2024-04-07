@@ -3,36 +3,51 @@ package Baekjoon;
 import java.util.*;
 import java.io.*;
 
-// 바이러스 - BFS, DFS
+// 유기농 배추 - BFS, DFS
 public class Problem2606 {
-    public static boolean[] visited;
-    public static int[][] graph;
-    public static int answer = 0;
+    private static boolean[][] visited;
+    private static boolean[][] graph;
+    private static int answer = 0;
+    private static int[] dx = { 0, 1, 0, -1 };
+    private static int[] dy = { 1, 0, -1, 0 };
+    private static int m;
+    private static int n;
 
-    public static void bfs(int start) {
-        Queue<Integer> q = new LinkedList();
-        q.offer(start);
-        visited[start] = true;
 
-        while (!q.isEmpty())  {
-            int nowVertex = q.poll();
-            for (int i = 1; i < graph[nowVertex].length; i++) {
-                if (graph[nowVertex][i] == 1 && !visited[i]) {
-                    answer++;
-                    visited[i] = true;
-                    q.offer(i);
+//    public static void dfs(int x, int y) {
+//        visited[x][y] = true;
+//
+//        for (int i = 0; i < 4; i++) {
+//            int newX = x + dx[i];
+//            int newY = y + dy[i];
+//
+//            if (newX >= 0 && newX < m && newY >= 0 && newY < n) {
+//                if (graph[newX][newY] && !visited[newX][newY]) {
+//                    dfs(newX, newY);
+//                }
+//
+//            }
+//        }
+//    }
+
+    public static void bfs(int x, int y) {
+        Queue<int[]> q = new LinkedList<int[]>();
+        q.offer(new int[] {x, y});
+        visited[x][y] = true;
+
+        while (!q.isEmpty()) {
+            int[] now = q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int newX = now[0] + dx[i];
+                int newY = now[1] + dy[i];
+
+                if (newX >= 0 && newX < m && newY >= 0 && newY < n) {
+                    if (graph[newX][newY] && !visited[newX][newY]) {
+                        q.offer(new int[] {newX, newY});
+                        visited[newX][newY] = true;
+                    }
                 }
-            }
-        }
-    }
-
-    public static void dfs(int start) {
-        visited[start] = true;
-
-        for (int i = 1; i < graph[start].length; i++) {
-            if (graph[start][i] == 1 && !visited[i]) {
-                answer++;
-                dfs(i);
             }
         }
     }
@@ -40,26 +55,37 @@ public class Problem2606 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        st = new StringTokenizer(br.readLine());
-        int vertexNum = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
-        int edgeNum = Integer.parseInt(st.nextToken());
+        int testcaseNum = Integer.parseInt(br.readLine());
 
-        visited = new boolean[vertexNum + 1];
-        graph = new int[vertexNum + 1][vertexNum + 1];
-
-        for (int i = 0; i < edgeNum; i++) {
+        for (int t = 0; t < testcaseNum; t++) {
+            answer = 0;
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            graph[s][e] = 1;
-            graph[e][s] = 1;
+            m = Integer.parseInt(st.nextToken());
+            n = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+
+            visited = new boolean[m][n];
+            graph = new boolean[m][n];
+            for (int i = 0; i < k; i++) {
+                st = new StringTokenizer(br.readLine());
+                int x = Integer.parseInt(st.nextToken());
+                int y = Integer.parseInt(st.nextToken());
+                graph[x][y] = true;
+            }
+
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (graph[i][j] && !visited[i][j]) {
+                        answer++;
+//                        dfs(i, j);
+                        bfs(i, j);
+                    }
+                }
+            }
+
+            System.out.println(answer);
         }
 
-        bfs(1);
-//        dfs(1);
-
-        System.out.println(answer);
     }
 }
