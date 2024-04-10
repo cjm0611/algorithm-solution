@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 
 // 유기농 배추 - BFS, DFS
-public class Problem2606 {
+public class Problem1012 {
     private static boolean[][] visited;
     private static boolean[][] graph;
     private static int answer = 0;
